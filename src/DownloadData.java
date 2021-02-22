@@ -72,7 +72,7 @@ public class DownloadData extends HttpServlet {
         out.write(jsonArray.toString());
         out.flush();
         out.close();
-        resp.getOutputStream().write(jsonArray.getAsByte());
+        //resp.getOutputStream().write(jsonArray.getAsByte());
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

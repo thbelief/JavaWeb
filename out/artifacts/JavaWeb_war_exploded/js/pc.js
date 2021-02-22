@@ -11,7 +11,7 @@ function exit_f() {
         confirmButtonText: 'Yes'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location = "http://localhost:8080/JavaWeb/logout.jsp"
+            window.location = "http://159.75.108.98:8080/JavaWeb_war/logout.jsp"
         }
     })
 }
@@ -49,6 +49,8 @@ let account_password=localStorage.getItem("account_password");
 let user_ID=localStorage.getItem("userID");
 //alert(account_number+account_password+" "+userID)
 //console.log(account_number+account_password)
+//全局的这个表
+var table;//在后面填充的
 
 //这个是标记的天数 必须在本月绘制完之后重置为0
 var dayNum=0;
@@ -183,17 +185,114 @@ $(document).ready(function(){
     })
     //删除选中的点击事件
     $("#delete_check").click(function () {
+        Swal.fire({
+            title: '确定删除?',
+            text: "删除数据不可恢复，请慎重考虑",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00c853',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //获取所有的选中的checkboxde的父tr
+                var tr=$("input:checkbox[name='c0']:checked").parents("tr");
+                if($("input:checkbox[name='c0']:not(:checked)").length==0){
+                    //判断是否全部选中 如果全部选中直接重新建表
+                    //这个是后会删除所有 直接删除表然后新建
+                    $("#spreadsheet3").empty();
+                    note_table([{}])
+                }else{
+                    //console.log(tr)
+                    tr.each(function () {
+                        //遍历每一个 然后删除该行的数据即可
+                        //console.log($(this).children("td").eq(0).text())
+                        //获取所有选中的所在行的编号
+                        var colum_id=$(this).children("td").eq(0).text();
+                        //删除该tr
+                        $(this).remove()
+                        // //先删除之前的表格里面的元素 再重新添加
+                        // $("#spreadsheet3").empty();
+                    })
+                }
+
+            }
+        })
+
 
     })
+    //保存修改的点击事件
+    $("#save_edit").click(function () {
+        Swal.fire({
+            title: '确定同步到云端么?',
+            text: "请确保数据安全并且符合规范，否则不予同步，如果同步成功，会在右上角显示成功消息，请注意查收。",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00c853',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var temp=table.getJson();
+                //转换回服务器要求的格式
+                changeRespStyle(temp);
+                //对象数组必须转换为json字符串
+                $.post("http://159.75.108.98:8080/JavaWeb_war/UploadData",JSON.stringify(temp),function (result) {
+                    toastr.success(result)
+                })
+            }
+        })
 
+    })
+    //新建记事的点击事件
+    $("#insert_note").click(function () {
+        //先获取当前表格最后一行
+        //var lastline=$("tbody.draggable").children("tr:last-child");
+        table.insertRow();
+    })
+    //myuserID的点击事件
+    $("#my_userID").click(function () {
+        toastr.success("你的userID是\n"+user_ID)
+    })
+    //正确范例的插入事件
+    $("#sure_insert").click(function () {
+        table.insertRow(["false","1","1","我是标题","高","红","2021","2","22","是","2021-2-23-12-00","我是备注" ], 0);
+    })
 });
-//所有的记事数据
-var all_note_data;
+//将当前的记事数据转化成从服务器请求过来时的样式 因为来的时候做了转换 回去也得转换
+function changeRespStyle(temp) {
+    //这里要判断是否已经删除完毕 如果是删除完了的话 还要发一个只有userID的过去 清空数据库
+    $.each(temp,function (index,value) {
+        if(value.description==""){
+            value.description=" "
+        }
+        //遍历数据
+        if(value.degree=="特殊日期"){
+            value.degree="MemorialDay"
+        }
+        if(value.degreeColor=="黄"){
+            value.degreeColor="Yellow"
+        }else if(value.degreeColor=="红"){
+            value.degreeColor="Red"
+        }else if(value.degreeColor=="绿"){
+            value.degreeColor="Green"
+        }
+        if(value.isAlarm=="否"){
+            value.isAlarm=0
+        }else{
+            value.isAlarm="1"
+        }
+        if(value.alarmRemind==""){
+            value.alarmRemind="选择提醒时间";
+        }
+    })
+}
+//存放记事日期
 var all_note_date_list=[];
 function getData() {
     //设置为同步请求 否则的话无法将数据传出来
     $.ajaxSettings.async=false;
-    $.post("http://localhost:8080/JavaWeb/DownloadData",{userID:user_ID},function(result){
+    $.post("http://159.75.108.98:8080/JavaWeb_war/DownloadData",{userID:user_ID},function(result){
         //遍历一遍 转化一下
         $.each(result,function(index,value){
             if(value.degree=="MemorialDay"){
@@ -214,18 +313,18 @@ function getData() {
             if(value.alarmRemind=="选择提醒时间"){
                 value.alarmRemind="";
             }
+            result["userID"]=user_ID;
             //赋值date
             all_note_date_list.push(value.year+"-"+value.month+"-"+value.day)
         });
-        //赋值给全局变量
-        all_note_data=result;
         note_table(result)
     },"json");
 
 }
 //传入一个jsonarray实例化就直接上了
 function note_table(jsonarray) {
-    jspreadsheet(document.getElementById('spreadsheet3'), {
+    table=jspreadsheet(document.getElementById('spreadsheet3'), {
+        minDimensions: [10,1],
         data:jsonarray,
         columns: [
             {
@@ -235,48 +334,60 @@ function note_table(jsonarray) {
                 title:'选中',
             },
             {
+                type: 'text',
+                width:'50',
+                name:'userID',
+                title:'userID*',
+            },
+            {
+                type: 'text',
+                width:'50',
+                name:'_id',
+                title:'ID*',
+            },
+            {
                 type:'text',
                 width:'100',
                 name:'title',
-                title:'标题',
+                title:'标题*',
             },
             {
                 type:'dropdown',
                 width:'100',
                 name:'degree',
-                title:'程度',
+                title:'程度*',
                 source:[ "低", "中", "高","特殊日期" ],
             },
             {
                 type:'dropdown',
                 width:'100',
                 name:'degreeColor',
-                title:'程度颜色',
+                title:'程度颜色*',
                 source:[ "绿", "黄", "红","无" ],
             },
             {
                 type:'text',
                 width:'50',
                 name:'year',
-                title:'年',
+                title:'年*',
             },
             {
                 type:'text',
                 width:'50',
                 name:'month',
-                title:'月',
+                title:'月*',
             },
             {
                 type:'text',
                 width:'50',
                 name:'day',
-                title:'日',
+                title:'日*',
             },
             {
                 type:'dropdown',
                 width:'80',
                 name:'isAlarm',
-                title:'提醒',
+                title:'提醒*',
                 source:[ "是", "否" ],
             },
             {
@@ -295,7 +406,7 @@ function note_table(jsonarray) {
                 type:'hidden',
                 name:'gender'
             },
-        ]
+        ],
     });
 }
 

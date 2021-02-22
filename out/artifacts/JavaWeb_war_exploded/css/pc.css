@@ -216,6 +216,36 @@ button{
   border-radius: 20px;
   background: #00e676;
 }
+.insert_note{
+  color: #FFFFFF;
+  margin-left: 20px;
+  width: 80px;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 40px;
+  border-radius: 20px;
+  background: #00bfa5;
+}
+.my_userID{
+  color: #FFFFFF;
+  margin-left: 20px;
+  width: 80px;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 40px;
+  border-radius: 20px;
+  background: #ffc400;
+}
+.sure_insert{
+  color: #FFFFFF;
+  margin-left: 20px;
+  width: 80px;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 40px;
+  border-radius: 20px;
+  background: #5d4037;
+}
 .date_have_note_item{
   margin-left: 10px;
   margin-right: 10px;

@@ -33,7 +33,7 @@ function stencil(action_s) {
                 localStorage.setItem("account_password",$("#account_password").val());
                 localStorage.setItem("userID",data.toString());
                 //跳转到修改页面
-                window.location = "http://localhost:8080/JavaWeb/Personal.jsp"
+                window.location = "http://159.75.108.98:8080/JavaWeb_war/Personal.jsp"
             }
         });
     }

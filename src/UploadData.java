@@ -36,56 +36,85 @@ public class UploadData extends HttpServlet {
         while ((line = br.readLine()) != null) {
             sb.append(line);
         }
+        String res_result="上传数据操作执行完毕";
         //获取到json数组数据
         JsonArray jsonArray= JsonParser.parseString(sb.toString()).getAsJsonArray();
         //接下来是修改数据库中该用户的数据
         //获取用户ID
         int userID=jsonArray.get(0).getAsJsonObject().get("userID").getAsInt();
 
-        Connection C=null;
-        Properties info=new Properties();
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-            info.setProperty("user","root");
-            info.setProperty("password","13547296248tyty++");
-            C = DriverManager.getConnection("jdbc:mysql://localhost/calendar_data",info);
-            Statement state= null;
+        //先判断传过来的是不是空 如果是的话
+        if(jsonArray.get(0).getAsJsonObject().get("_id").getAsInt()==(-1)){
+            res_result="上传数据为空，已成功清空数据";
+            Connection C=null;
+            Properties info=new Properties();
             try {
-                //双向滚动，并及时跟踪数据库的更新,以便更改ResultSet中的数据。 可以更新 ResultSet
-                state=C.createStatement (ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                //先删除之前的 再更新新的
-                state.execute("DELETE FROM note_data WHERE userID="+userID+";");
-                //插入
-                for (int i=0;i<jsonArray.size();i++){
-                    state.execute("INSERT INTO note_data (userID,_id,title,degree,degreeColor,`year`,`month`,`day`,isAlarm,alarmRemind,description) VALUES ("+
-                            jsonArray.get(i).getAsJsonObject().get("userID").getAsInt()+","+
-                            jsonArray.get(i).getAsJsonObject().get("_id").getAsInt()+","+
-                            " '"+jsonArray.get(i).getAsJsonObject().get("title").getAsString()+"',"+
-                            " '"+jsonArray.get(i).getAsJsonObject().get("degree").getAsString()+"',"+
-                            " '"+jsonArray.get(i).getAsJsonObject().get("degreeColor").getAsString()+"',"+
-                            jsonArray.get(i).getAsJsonObject().get("year").getAsInt()+","+
-                            jsonArray.get(i).getAsJsonObject().get("month").getAsInt()+","+
-                            jsonArray.get(i).getAsJsonObject().get("day").getAsInt()+","+
-                            jsonArray.get(i).getAsJsonObject().get("isAlarm").getAsInt()+","+
-                            " '"+jsonArray.get(i).getAsJsonObject().get("alarmRemind").getAsString()+"',"+
-                            " '"+jsonArray.get(i).getAsJsonObject().get("description").getAsString()+
-                            "');");
+                Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+                info.setProperty("user","root");
+                info.setProperty("password","13547296248tyty++");
+                C = DriverManager.getConnection("jdbc:mysql://localhost/calendar_data",info);
+                Statement state= null;
+                try {
+                    //双向滚动，并及时跟踪数据库的更新,以便更改ResultSet中的数据。 可以更新 ResultSet
+                    state=C.createStatement (ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                    //先删除之前的 再更新新的
+                    state.execute("DELETE FROM note_data WHERE userID="+userID+";");
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
                 }
-            } catch (SQLException throwables) {
+            } catch (SQLException | ClassNotFoundException throwables) {
                 throwables.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
+        }else{
+            Connection C=null;
+            Properties info=new Properties();
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+                info.setProperty("user","root");
+                info.setProperty("password","13547296248tyty++");
+                C = DriverManager.getConnection("jdbc:mysql://localhost/calendar_data",info);
+                Statement state= null;
+                try {
+                    //双向滚动，并及时跟踪数据库的更新,以便更改ResultSet中的数据。 可以更新 ResultSet
+                    state=C.createStatement (ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                    //先删除之前的 再更新新的
+                    state.execute("DELETE FROM note_data WHERE userID="+userID+";");
+                    //插入
+                    for (int i=0;i<jsonArray.size();i++){
+                        state.execute("INSERT INTO note_data (userID,_id,title,degree,degreeColor,`year`,`month`,`day`,isAlarm,alarmRemind,description) VALUES ("+
+                                jsonArray.get(i).getAsJsonObject().get("userID").getAsInt()+","+
+                                jsonArray.get(i).getAsJsonObject().get("_id").getAsInt()+","+
+                                " '"+jsonArray.get(i).getAsJsonObject().get("title").getAsString()+"',"+
+                                " '"+jsonArray.get(i).getAsJsonObject().get("degree").getAsString()+"',"+
+                                " '"+jsonArray.get(i).getAsJsonObject().get("degreeColor").getAsString()+"',"+
+                                jsonArray.get(i).getAsJsonObject().get("year").getAsInt()+","+
+                                jsonArray.get(i).getAsJsonObject().get("month").getAsInt()+","+
+                                jsonArray.get(i).getAsJsonObject().get("day").getAsInt()+","+
+                                jsonArray.get(i).getAsJsonObject().get("isAlarm").getAsInt()+","+
+                                " '"+jsonArray.get(i).getAsJsonObject().get("alarmRemind").getAsString()+"',"+
+                                " '"+jsonArray.get(i).getAsJsonObject().get("description").getAsString()+
+                                "');");
+                    }
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            } catch (SQLException | ClassNotFoundException throwables) {
+                throwables.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            }
         }
-        String res_result="上传数据操作执行完毕";
+
         out.write(res_result);
         out.flush();
         out.close();
-        resp.getOutputStream().write(res_result.getBytes());
+        //resp.getOutputStream().write(res_result.getBytes());
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

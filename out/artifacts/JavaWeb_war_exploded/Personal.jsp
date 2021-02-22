@@ -16,7 +16,8 @@
 <head>
     <title>个人</title>
     <!-- 设备屏幕显示网页的区域 1.0表示按实际显示 无缩放-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%--    <meta name="viewport" content="width=device-width, initial-scale=1.0">--%>
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=0.3, maxmum-scale=1.0, minimum-scale=0.3">
     <link rel="stylesheet" type="text/css" href="css/pc.css">
     <link rel="stylesheet" type="text/css" href="css/toastr.css">
     <link rel="stylesheet" type="text/css" href="css/layui.css">
@@ -77,6 +78,9 @@
                 <button class="check_all" id="check_all">全选</button>
                 <button class="delete_check" id="delete_check">删除选中</button>
                 <button class="save_edit" id="save_edit">保存修改</button>
+                <button class="insert_note" id="insert_note">新建数据</button>
+                <button class="my_userID" id="my_userID">userID</button>
+                <button class="sure_insert" id="sure_insert">范例</button>
             </div>
             <div id="spreadsheet3"></div>
         </div>
