@@ -2,6 +2,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -42,9 +43,15 @@ public class Login extends HttpServlet {
                 resultSet=state.executeQuery("SELECT userId FROM user WHERE account_number="+account_number+
                         " and " + "account_password=" +"'"+ account_password +"';");
                 if(resultSet.first()){
+                    //保存session做登陆校验
+                    HttpServletRequest httpServletRequest=req;
+                    HttpSession session=httpServletRequest.getSession();
+                    //表示已经登陆 就可以进入个人中心了 因为personal.jsp做了校验 必须有isLogin
+                    session.setAttribute("isLogin","true");
+
                     msg=resultSet.getString("userID");
                 }else{
-                    msg="账号不存在，请注册后再登陆！";
+                    msg="账号不存在或者密码错误";
                 }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -56,10 +63,12 @@ public class Login extends HttpServlet {
         } catch (InstantiationException e) {
             e.printStackTrace();
         }
+
         out.write(msg);
         out.flush();
         out.close();
-        resp.getOutputStream().write(msg.getBytes());
+        //这里注意getoutputStream和out的冲突
+        //resp.getOutputStream().write(msg.getBytes());
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -47,9 +47,9 @@ public class Registered extends HttpServlet {
                     //表中不存在
                     state.execute("INSERT INTO user (openID,account_number,account_password) VALUES ("+
                             "'无',"+account_number+",'"+account_password+"');");
-                    msg="账号注册成功！";
+                    msg="账号注册成功";
                 }else{
-                    msg="账号已注册,无法再注册！";
+                    msg="账号已注册,无法再注册";
                 }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -64,7 +64,7 @@ public class Registered extends HttpServlet {
         out.write(msg);
         out.flush();
         out.close();
-        resp.getOutputStream().write(msg.getBytes());
+        //resp.getOutputStream().write(msg.getBytes());
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

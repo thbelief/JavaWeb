@@ -1,0 +1,102 @@
+﻿/* *选择所有元素 */
+*{
+  margin: 0px;
+  padding: 0px;
+}
+
+.login{
+  width: 100%;
+  /*自动居中 表示上下边界为0，左右则根据宽度自适应相同值（即居中）*/
+  margin: 0 auto;
+}
+.background_color{
+  /* 灵活布局 */
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  /* 弹性盒子在横轴和纵轴的对齐方式 */
+  justify-content: center;
+  align-items: center;
+  background: #546e7a;
+}
+.center_tv{
+  background: #ffffff;
+  border-radius: 15px;
+  display: flex;
+  padding: 50px 150px 50px 150px;
+}
+.login_form{
+  width: 250px;
+}
+.login_title{
+  font-size: 30px;
+  text-align: center;
+  margin-top: 30px;
+  display: block;
+  width: 100%;
+  height: 50px;
+  padding-bottom: 30px;
+}
+.login_number{
+  /* 相对布局 */
+  position: relative;
+  margin-bottom: 10px;
+}
+input{
+  /* 不要描边 */
+  border: none;
+}
+.input_number{
+  width: 100%;
+  background: #e6e6e6;
+  display: block;
+  height: 50px;
+  padding: 0 30px 0 30px;
+}
+.login_password{
+  /* 相对布局 */
+  position: relative;
+  margin-bottom: 10px;
+}
+.input_password{
+  width: 100%;
+  background: #e6e6e6;
+  display: block;
+  height: 50px;
+  padding: 0 30px 0 30px;
+}
+.login_bt_form{
+  width: 100%;
+  display: flex;
+  margin-top: 10px;
+  justify-content: center;
+  padding-top: 10px;
+}
+button{
+  border: none;
+}
+.login_bt{
+  color: #FFFFFF;
+  width: 100%;
+  padding: 0 25px;
+  justify-content: center;
+  height: 50px;
+  border-radius: 25px;
+  background: #795548;
+}
+.register_bt{
+  color: #FFFFFF;
+  width: 100%;
+  padding: 0 25px;
+  margin-left: 30px;
+  justify-content: center;
+  height: 50px;
+  border-radius: 25px;
+  background: #795548;
+}
+.display_message{
+  text-align: center;
+  width: 100%;
+  color: indianred;
+  display: none;
+}

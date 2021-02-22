@@ -4,15 +4,6 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
     <servlet>
-        <servlet-name>CalendarData</servlet-name>
-        <servlet-class>CalendarData</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>CalendarData</servlet-name>
-        <url-pattern>/CalendarData</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>UploadData</servlet-name>
         <servlet-class>UploadData</servlet-class>
     </servlet>

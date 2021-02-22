@@ -1,0 +1,229 @@
+﻿/* *选择所有元素 */
+*{
+  margin: 0px;
+  padding: 0px;
+}
+body{
+  /* 不允许滑动 */
+  overflow: hidden;
+}
+.personal{
+  width: 100%;
+  /*自动居中 表示上下边界为0，左右则根据宽度自适应相同值（即居中）*/
+  margin: 0 auto;
+}
+.background_color_1{
+  /* 灵活布局 */
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  /* 弹性盒子在横轴和纵轴的对齐方式 */
+  justify-content: flex-start;
+  align-items: center;
+  background: #546e7a;
+}
+.center_tv_1{
+  background: #ffffff;
+  border-radius: 15px;
+  margin-left: 50px;
+  display: flex;
+  padding: 120px 150px 0px 150px;
+}
+.center_tv_2{
+  background: #ffffff;
+  width: auto;
+  height: 500px;
+  border-radius: 15px;
+  margin-right: 50px;
+  margin-left: 50px;
+  display: flex;
+  overflow: auto;
+  flex-flow: column;
+  padding: 10px 10px 10px 10px;
+}
+button{
+  /* 不需要描边 */
+  border: none;
+}
+.exit_bt{
+  color: #FFFFFF;
+  width: 100px;
+  justify-content: flex-end;
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  align-items: flex-end;
+  height: 50px;
+  border-radius: 20px;
+  background: chocolate;
+}
+.back_today_bt{
+  color: #FFFFFF;
+  width: 100px;
+  justify-content: flex-end;
+  position: absolute;
+  top: 50px;
+  right: 200px;
+  align-items: flex-end;
+  height: 50px;
+  border-radius: 20px;
+  background: #0091ea;
+}
+.about_bt{
+  color: #FFFFFF;
+  width: 100px;
+  justify-content: flex-end;
+  position: absolute;
+  top: 50px;
+  right: 350px;
+  align-items: flex-end;
+  height: 50px;
+  border-radius: 20px;
+  background: #00695c;
+}
+.contain_calendar{
+  position: relative;
+  top: -80px;
+  height: auto;
+  width: 500px;
+}
+.calendar_title{
+  font-size: 30px;
+  text-align: center;
+  display: block;
+  width: 100%;
+  height: 50px;
+}
+.title_tab{
+  display: flex;
+  margin-top: 10px;
+  text-align: center;
+  justify-content: center;
+}
+.up_month{
+  height: 25px;
+  width: 60px;
+  color: #FFFFFF;
+  border-radius: 10px;
+  background: #00bfa5;
+}
+.down_month{
+  height: 25px;
+  width: 60px;
+  color: #FFFFFF;
+  border-radius: 10px;
+  background: #00bfa5;
+}
+.now_date{
+  height: 50px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.week_bar{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.week_bar_item{
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 25px;
+  width: 60px;
+  color: #FFFFFF;
+  border-radius: 10px;
+  background: #00e676;
+}
+.date_bar{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.date_item{
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 25px;
+  width: 60px;
+  font-size: 15px;
+  border-radius: 10px;
+}
+@keyframes fade {
+  from {
+    opacity: 1.0;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1.0;
+  }
+}
+
+@-webkit-keyframes fade {
+  from {
+    opacity: 1.0;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1.0;
+  }
+}
+.date_select_item{
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 25px;
+  width: 60px;
+  font-size: 15px;
+  border-radius: 10px;
+  background: #bd362f;
+  /*闪烁效果*/
+  animation: fade 600ms infinite;
+  -webkit-animation: fade 600ms infinite;
+}
+.note_bar{
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.check_all{
+  color: #FFFFFF;
+  width: 80px;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 40px;
+  border-radius: 20px;
+  background: #616161;
+}
+.delete_check{
+  color: #FFFFFF;
+  margin-left: 20px;
+  width: 80px;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 40px;
+  border-radius: 20px;
+  background: #ff1744;
+}
+.save_edit{
+  color: #FFFFFF;
+  margin-left: 20px;
+  width: 80px;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 40px;
+  border-radius: 20px;
+  background: #00e676;
+}
+.date_have_note_item{
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 25px;
+  width: 60px;
+  font-size: 15px;
+  border-radius: 10px;
+  background: #ffab00;
+}
+
+
