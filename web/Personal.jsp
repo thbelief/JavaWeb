@@ -79,7 +79,7 @@
                 <button class="delete_check" id="delete_check">删除选中</button>
                 <button class="save_edit" id="save_edit">保存修改</button>
                 <button class="insert_note" id="insert_note">新建数据</button>
-                <button class="my_userID" id="my_userID">userID</button>
+                <button class="download_csv" id="download_csv">下载表格</button>
                 <button class="sure_insert" id="sure_insert">范例</button>
             </div>
             <div id="spreadsheet3"></div>

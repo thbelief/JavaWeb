@@ -68,15 +68,15 @@ function drawLineCalendar(firstI,size,barnum,isblank) {
             temp.innerHTML="";
         }else{
             dayNum=dayNum+1;
+            //记事的优先级高于选中
+            if(currentDay==dayNum){
+                //默认标记今天 上一月下一月也是默认选中选中的天数
+                temp.setAttribute("class","date_select_item");
+            }
             //记事的标记
             if(all_note_date_list.indexOf(currentYear+"-"+currentMonth+"-"+dayNum)>-1){
                 //标记这一天
                 temp.setAttribute("class","date_have_note_item");
-            }
-            //选中的优先级高于记事
-            if(currentDay==dayNum){
-                //默认标记今天 上一月下一月也是默认选中选中的天数
-                temp.setAttribute("class","date_select_item");
             }
             //阴历的部分
             var lunar=Solar.fromYmd(currentYear,currentMonth,dayNum).getLunar();
@@ -137,6 +137,7 @@ function centerFunction(){
             $("#now_date").html(currentYear+"-"+currentMonth+"-"+currentDay);
         }
     })
+
 }
 //html是从上到下执行的 执行js的时候html下面的内容还没加载 在准备好之后再操作
 $(document).ready(function(){
@@ -195,26 +196,42 @@ $(document).ready(function(){
             confirmButtonText: 'Yes'
         }).then((result) => {
             if (result.isConfirmed) {
+
                 //获取所有的选中的checkboxde的父tr
                 var tr=$("input:checkbox[name='c0']:checked").parents("tr");
                 if($("input:checkbox[name='c0']:not(:checked)").length==0){
-                    //判断是否全部选中 如果全部选中直接重新建表
-                    //这个是后会删除所有 直接删除表然后新建
-                    $("#spreadsheet3").empty();
-                    note_table([{}])
-                }else{
-                    //console.log(tr)
-                    tr.each(function () {
-                        //遍历每一个 然后删除该行的数据即可
-                        //console.log($(this).children("td").eq(0).text())
-                        //获取所有选中的所在行的编号
-                        var colum_id=$(this).children("td").eq(0).text();
-                        //删除该tr
-                        $(this).remove()
-                        // //先删除之前的表格里面的元素 再重新添加
-                        // $("#spreadsheet3").empty();
-                    })
+                    //由于至少都有一行，如果要删除完的话必须添加一行空白列，再删才能删完 不然会剩下一个
+                    table.insertRow([],0)
                 }
+                tr.each(function () {
+                    table.deleteRow(parseInt($(this).attr("data-y")),1)
+                })
+
+                // if($("input:checkbox[name='c0']:not(:checked)").length==0){
+                //     //判断是否全部选中 如果全部选中直接重新建表
+                //     //这个是后会删除所有 直接删除表然后新建
+                //     $("#spreadsheet3").remove();
+                //     var sp=document.createElement("div");
+                //     sp.setAttribute("id","spreadsheet3");
+                //     $("#center_tv_2").append(sp)
+                //     note_table([{}])
+                //     //console.log("目前数据"+JSON.stringify(table.getJson()))
+                // }else{
+                //     //console.log(tr)
+                //     tr.each(function () {
+                //         //遍历每一个 然后删除该行的数据即可
+                //         //console.log($(this).children("td").eq(0).text())
+                //         //获取所有选中的所在行的编号
+                //         var colum_id=$(this).attr("data-y"); //所在行
+                //         //console.log("选中的行数 "+colum_id)
+                //         //调用方法删除该行的数据
+                //         table.deleteRow(colum_id,colum_id);
+                //         //删除该tr
+                //         //$(this).remove()
+                //         // //先删除之前的表格里面的元素 再重新添加
+                //         // $("#spreadsheet3").empty();
+                //     })
+                // }
 
             }
         })
@@ -251,41 +268,55 @@ $(document).ready(function(){
         table.insertRow();
     })
     //myuserID的点击事件
-    $("#my_userID").click(function () {
-        toastr.success("你的userID是\n"+user_ID)
+    $("#download_csv").click(function () {
+        table.download(true);
     })
     //正确范例的插入事件
     $("#sure_insert").click(function () {
-        table.insertRow(["false","1","1","我是标题","高","红","2021","2","22","是","2021-2-23-12-00","我是备注" ], 0);
+        table.insertRow(["false","我是标题","高","红", "2021","2","22","是","2021-2-23-12-00","我是备注",""], 0);
     })
 });
 //将当前的记事数据转化成从服务器请求过来时的样式 因为来的时候做了转换 回去也得转换
 function changeRespStyle(temp) {
-    //这里要判断是否已经删除完毕 如果是删除完了的话 还要发一个只有userID的过去 清空数据库
-    $.each(temp,function (index,value) {
-        if(value.description==""){
-            value.description=" "
-        }
-        //遍历数据
-        if(value.degree=="特殊日期"){
-            value.degree="MemorialDay"
-        }
-        if(value.degreeColor=="黄"){
-            value.degreeColor="Yellow"
-        }else if(value.degreeColor=="红"){
-            value.degreeColor="Red"
-        }else if(value.degreeColor=="绿"){
-            value.degreeColor="Green"
-        }
-        if(value.isAlarm=="否"){
-            value.isAlarm=0
-        }else{
-            value.isAlarm="1"
-        }
-        if(value.alarmRemind==""){
-            value.alarmRemind="选择提醒时间";
-        }
-    })
+    if(temp.length==0){
+        temp=[{userID:user_ID,_id:-1}];
+    }
+    var black=[{"checkbox":false,"title":"","degree":"","degreeColor":"","year":"","month":"","day":"","isAlarm":"","alarmRemind":"","description":"","gender":""}]
+    if(temp==black){
+        //清空temp
+        temp.length=0;
+        temp=[{userID:user_ID,_id:-1}];
+    }else{
+        //这里要判断是否已经删除完毕 如果是删除完了的话 还要发一个只有userID的过去 清空数据库
+        $.each(temp,function (index,value) {
+            value["userID"]=user_ID;
+            //这个其实只是校验位 插入进去没用到这个 这个用来区别-1
+            value["_id"]=1;
+            if(value.description==""){
+                value.description=" "
+            }
+            //遍历数据
+            if(value.degree=="特殊日期"){
+                value.degree="MemorialDay"
+            }
+            if(value.degreeColor=="黄"){
+                value.degreeColor="Yellow"
+            }else if(value.degreeColor=="红"){
+                value.degreeColor="Red"
+            }else if(value.degreeColor=="绿"){
+                value.degreeColor="Green"
+            }
+            if(value.isAlarm=="否"){
+                value.isAlarm=0
+            }else{
+                value.isAlarm="1"
+            }
+            if(value.alarmRemind==""){
+                value.alarmRemind="选择提醒时间";
+            }
+        })
+    }
+
 }
 //存放记事日期
 var all_note_date_list=[];
@@ -332,18 +363,6 @@ function note_table(jsonarray) {
                 width:'50',
                 name:'checkbox',
                 title:'选中',
-            },
-            {
-                type: 'text',
-                width:'50',
-                name:'userID',
-                title:'userID*',
-            },
-            {
-                type: 'text',
-                width:'50',
-                name:'_id',
-                title:'ID*',
             },
             {
                 type:'text',
