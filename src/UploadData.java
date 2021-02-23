@@ -85,9 +85,8 @@ public class UploadData extends HttpServlet {
                     state.execute("DELETE FROM note_data WHERE userID="+userID+";");
                     //插入
                     for (int i=0;i<jsonArray.size();i++){
-                        state.execute("INSERT INTO note_data (userID,_id,title,degree,degreeColor,`year`,`month`,`day`,isAlarm,alarmRemind,description) VALUES ("+
+                        state.execute("INSERT INTO note_data (userID,title,degree,degreeColor,`year`,`month`,`day`,isAlarm,alarmRemind,description) VALUES ("+
                                 jsonArray.get(i).getAsJsonObject().get("userID").getAsInt()+","+
-                                jsonArray.get(i).getAsJsonObject().get("_id").getAsInt()+","+
                                 " '"+jsonArray.get(i).getAsJsonObject().get("title").getAsString()+"',"+
                                 " '"+jsonArray.get(i).getAsJsonObject().get("degree").getAsString()+"',"+
                                 " '"+jsonArray.get(i).getAsJsonObject().get("degreeColor").getAsString()+"',"+

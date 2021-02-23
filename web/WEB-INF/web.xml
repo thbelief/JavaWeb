@@ -39,4 +39,13 @@
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>ModifyPassword</servlet-name>
+        <servlet-class>ModifyPassword</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ModifyPassword</servlet-name>
+        <url-pattern>/ModifyPassword</url-pattern>
+    </servlet-mapping>
 </web-app>
