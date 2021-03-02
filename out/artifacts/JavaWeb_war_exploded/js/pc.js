@@ -11,7 +11,7 @@ function exit_f() {
         confirmButtonText: 'Yes'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location = "http://159.75.108.98:8080/JavaWeb_war/logout.jsp"
+            window.location = "http://www.thbelief.xyz/logout.jsp"
         }
     })
 }
@@ -254,7 +254,7 @@ $(document).ready(function(){
                 //转换回服务器要求的格式
                 changeRespStyle(temp);
                 //对象数组必须转换为json字符串
-                $.post("http://159.75.108.98:8080/JavaWeb_war/UploadData",JSON.stringify(temp),function (result) {
+                $.post("http://www.thbelief.xyz/UploadData",JSON.stringify(temp),function (result) {
                     toastr.success(result)
                 })
             }
@@ -323,7 +323,7 @@ var all_note_date_list=[];
 function getData() {
     //设置为同步请求 否则的话无法将数据传出来
     $.ajaxSettings.async=false;
-    $.post("http://159.75.108.98:8080/JavaWeb_war/DownloadData",{userID:user_ID},function(result){
+    $.post("http://www.thbelief.xyz/DownloadData",{userID:user_ID},function(result){
         //遍历一遍 转化一下
         $.each(result,function(index,value){
             if(value.degree=="MemorialDay"){
@@ -420,11 +420,7 @@ function note_table(jsonarray) {
                 width:'200',
                 name:'description',
                 title:'备注',
-            },
-            {
-                type:'hidden',
-                name:'gender'
-            },
+            }
         ],
     });
 }

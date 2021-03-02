@@ -14,10 +14,11 @@
 %>
 <html>
 <head>
-    <title>个人</title>
+    <title>极简日历-个人中心</title>
     <!-- 设备屏幕显示网页的区域 1.0表示按实际显示 无缩放-->
 <%--    <meta name="viewport" content="width=device-width, initial-scale=1.0">--%>
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=0.3, maxmum-scale=1.0, minimum-scale=0.3">
+    <link rel="icon" href="image/calendar.ico" type="image/x-icon"/>
     <link rel="stylesheet" type="text/css" href="css/pc.css">
     <link rel="stylesheet" type="text/css" href="css/toastr.css">
     <link rel="stylesheet" type="text/css" href="css/layui.css">
